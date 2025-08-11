@@ -2,6 +2,8 @@ package com.hanaro.member.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +64,24 @@ public class MemberServiceImpl implements MemberService {
 
 		memberRepository.delete(member);
 		return "해당 회원을 삭제하였습니다.";
+	}
+
+	@Override
+	public long getMemberId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		Member member = memberRepository.findByEmail(email).orElseThrow(
+			() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+		return member.getId();
+	}
+
+	@Override
+	public Member getLoggedInMember() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		return memberRepository.findByEmail(email).orElseThrow(
+			() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 	}
 
 	public static MemberResponseDTO toDTO(Member member) {

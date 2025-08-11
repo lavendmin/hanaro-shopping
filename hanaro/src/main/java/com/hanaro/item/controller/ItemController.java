@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
+@Tag(name = "Item", description = "상품 등록/조회/수정/삭제")
 public class ItemController {
 	private final ItemService itemService;
 
@@ -48,7 +49,7 @@ public class ItemController {
 	// @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@Tag(name = "상품 수정")
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> updateItem(@PathVariable long id, @RequestBody ItemDTO itemDTO) {
+	public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
 		ItemResponseDTO itemResponseDTO = itemService.updateItem(id, itemDTO);
 		return ResponseEntity.ok(itemResponseDTO);
 	}
@@ -56,8 +57,9 @@ public class ItemController {
 	// @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@Tag(name = "상품 삭제")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteItem(@PathVariable long id) {
+	public ResponseEntity<?> deleteItem(@PathVariable Long id) {
 		String responseMsg = itemService.deleteItem(id);
 		return ResponseEntity.ok(Map.of("delete item", responseMsg));
 	}
+
 }

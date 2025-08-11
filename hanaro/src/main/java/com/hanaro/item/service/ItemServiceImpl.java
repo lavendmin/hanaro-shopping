@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
 		item.setImages(itemImages);
 		itemImageRepository.saveAll(itemImages);
 
-		return toDTO(item);
+		return toItemResponseDTO(item);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class ItemServiceImpl implements ItemService {
 			items = itemRepository.findAll(pageable);
 		}
 
-		return items.map(ItemServiceImpl::toDTO);
+		return items.map(ItemServiceImpl::toItemResponseDTO);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class ItemServiceImpl implements ItemService {
 
 		itemRepository.save(item);
 
-		return toDTO(item);
+		return toItemResponseDTO(item);
 	}
 
 	@Override
@@ -125,7 +125,18 @@ public class ItemServiceImpl implements ItemService {
 		return "해당 상품을 삭제하였습니다.";
 	}
 
-	public static ItemResponseDTO toDTO(Item item) {
+	@Override
+	public ItemDTO toItemDTO(Item item) {
+		return ItemDTO.builder()
+			.name(item.getName())
+			.description(item.getDescription())
+			.stock(item.getStock())
+			.price(item.getPrice())
+			.discount(item.getDiscount())
+			.build();
+	}
+
+	public static ItemResponseDTO toItemResponseDTO(Item item) {
 		List<ItemImageDTO> imageDTOs = item.getImages() == null
 			? List.of()
 			: item.getImages().stream().map(ItemImageDTO::new).toList();

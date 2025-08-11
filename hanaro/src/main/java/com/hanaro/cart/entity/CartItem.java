@@ -12,9 +12,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@Table(
+	uniqueConstraints = {
+		@UniqueConstraint(name = "uk_Cart_Item", columnNames = {"Cart", "Item"})
+	}
+)
 public class CartItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +37,10 @@ public class CartItem {
 	@ManyToOne
 	@JoinColumn(name = "cart", nullable = false, foreignKey = @ForeignKey(
 		name = "fk_CartItem_cart",
-		foreignKeyDefinition = "FOREIGN KEY (orders) REFERENCES Orders(id) ON DELETE CASCADE"))
+		foreignKeyDefinition = "FOREIGN KEY (cart) REFERENCES Cart(id) ON DELETE CASCADE"))
 	private Cart cart;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "item", nullable = false, foreignKey = @ForeignKey(
 		name = "fk_CartItem_item",
 		foreignKeyDefinition = "FOREIGN KEY (item) REFERENCES Item(id) ON DELETE CASCADE"))

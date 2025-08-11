@@ -70,7 +70,7 @@ public class MemberController {
 	// 회원 삭제
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteMember(@PathVariable long id) {
+	public ResponseEntity<?> deleteMember(@PathVariable Long id) {
 		String responseMsg = memberService.deleteMember(id);
 		return ResponseEntity.ok(Map.of("delete member", responseMsg));
 	}

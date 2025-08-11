@@ -9,6 +9,7 @@ import com.hanaro.SearchCond;
 import com.hanaro.item.dto.ItemDTO;
 import com.hanaro.item.dto.ItemRequestDTO;
 import com.hanaro.item.dto.ItemResponseDTO;
+import com.hanaro.item.entity.Item;
 
 public interface ItemService {
 	ItemResponseDTO createItem(List<MultipartFile> files, ItemRequestDTO itemRequestDTO);
@@ -18,4 +19,6 @@ public interface ItemService {
 	ItemResponseDTO updateItem(long id, ItemDTO itemDTO);
 
 	String deleteItem(long id);
+
+	ItemDTO toItemDTO(Item item);
 }

@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		System.out.println("*** DetailsService.loadUserByUsername = " + username);
 
 		// 시큐리티 User에서의 username은 로그인할 때 아이디로 쓰이는 것. 즉, 우린 email
-		Member member = memberRepository.findByEmail(username);
+		Member member = memberRepository.findByEmail(username).orElseThrow();
 
 		if (member == null) {
 			throw new UsernameNotFoundException(username + "is not found");
