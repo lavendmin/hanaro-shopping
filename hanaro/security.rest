@@ -1,0 +1,45 @@
+@baseUrl=http://localhost:8080
+
+### login - user success
+POST {{baseUrl}}/api/members/login
+Content-Type: application/x-www-form-urlencoded
+
+username = lee@gmail.com &
+password = 12345678
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+
+### login - admin success
+POST {{baseUrl}}/api/members/login
+Content-Type: application/x-www-form-urlencoded
+
+username = hanaro@gmail.com &
+password = 12345678
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+
+### login - failure
+POST {{baseUrl}}/api/members/login
+Content-Type: application/x-www-form-urlencoded
+
+username = lee@gmail.com &
+password = 00000000
+
+### 회원 목록
+GET {{baseUrl}}/members
+Authorization: Bearer {{auth_token}}
+
+### refresh token
+GET {{baseUrl}}/api/members/refresh?refreshToken={{refresh_token}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}

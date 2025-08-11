@@ -1,4 +1,4 @@
-package com.hana7.hanaro;
+package com.hanaro;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,0 +1,27 @@
+@baseUrl=http://localhost:8080
+
+### member - signup
+POST {{baseUrl}}/members/signUp
+Content-Type: application/json
+
+{
+  "nickname": "sss22",
+  "email": "sss22@gmail.com",
+  "password": "12345678"
+}
+
+### login - admin success
+POST {{baseUrl}}/api/members/login
+Content-Type: application/x-www-form-urlencoded
+
+username = hanaro@gmail.com &
+password = 12345678
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+
+### member - delete
+DELETE {{baseUrl}}/members/12
+Authorization: Bearer {{auth_token}}

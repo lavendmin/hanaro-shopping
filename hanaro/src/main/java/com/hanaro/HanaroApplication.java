@@ -1,4 +1,4 @@
-package com.hana7.hanaro;
+package com.hanaro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

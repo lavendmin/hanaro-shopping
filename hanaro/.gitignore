@@ -1,6 +1,9 @@
-HELP.md
+README.md
 .gradle
 build/
+logs/
+mysql/
+docker-compose.yml
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
