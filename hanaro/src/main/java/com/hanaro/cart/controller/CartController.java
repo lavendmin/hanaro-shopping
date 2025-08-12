@@ -24,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cart")
-@Tag(name = "Cart", description = "장바구니 담기/수정/삭제")
+@Tag(name = "Cart", description = "장바구니 담기/수정/삭제/조회")
 public class CartController {
 	private final CartService cartService;
 	private final MemberService memberService;
 
-	@Tag(name = "장바구니 담기")
+	@Tag(name = "장바구니 담기", description = "로그인 필요")
 	@PostMapping("/items")
 	public ResponseEntity<?> addItemToCart(@Valid @RequestBody CartRequestDTO cartRequestDTO) {
 		// long memberId = memberService.getMemberId();
@@ -39,7 +39,7 @@ public class CartController {
 		return ResponseEntity.ok(cartResponseDTO);
 	}
 
-	@Tag(name = "장바구니 수정")
+	@Tag(name = "장바구니 수정", description = "로그인 필요")
 	@PatchMapping("/items")
 	public ResponseEntity<?> updateCart(@Valid @RequestBody CartRequestDTO cartRequestDTO) {
 		Member member = memberService.getLoggedInMember();
@@ -48,7 +48,7 @@ public class CartController {
 		return ResponseEntity.ok(cartResponseDTO);
 	}
 
-	@Tag(name = "장바구니 삭제")
+	@Tag(name = "장바구니 삭제", description = "로그인 필요")
 	@DeleteMapping("/items/{id}")
 	public ResponseEntity<?> deleteItemFromCart(@PathVariable Long id) {
 		Member member = memberService.getLoggedInMember();
@@ -56,4 +56,6 @@ public class CartController {
 		String message = cartService.deleteItemFromCart(member, id);
 		return ResponseEntity.ok(Map.of("delete item from cart", message));
 	}
+
+	// TODO 장바구니 조회
 }

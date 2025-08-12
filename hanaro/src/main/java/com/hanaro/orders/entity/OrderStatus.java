@@ -1,4 +1,4 @@
-package com.hanaro.orders;
+package com.hanaro.orders.entity;
 
 public enum OrderStatus {
 	PAID, // 결제 완료

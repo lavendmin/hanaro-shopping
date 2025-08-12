@@ -12,4 +12,6 @@ public interface CartService {
 	CartResponseDTO updateCart(Member member, @Valid CartRequestDTO cartRequestDTO);
 
 	String deleteItemFromCart(Member member, Long itemId);
+
+	void clearCart(Member member);
 }

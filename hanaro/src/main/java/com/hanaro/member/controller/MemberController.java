@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Member", description = "로그인/회원가입 & 회원 목록(admin)/회원 삭제(admin)")
 @RequestMapping("/members")
 public class MemberController {
 	private final MemberService memberService;
@@ -52,14 +53,14 @@ public class MemberController {
 
 	}
 
-	// 회원 가입
+	@Tag(name = "회원가입")
 	@PostMapping("/signUp")
 	public ResponseEntity<?> signUp(@Valid @RequestBody MemberRequestDTO memberRequestDTO) {
 		MemberResponseDTO memberResponseDTO = memberService.createMember(memberRequestDTO);
 		return ResponseEntity.ok(memberResponseDTO);
 	}
 
-	// 회원 목록
+	@Tag(name = "회원 목록", description = "관리자 권한 필요")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping()
 	public ResponseEntity<?> getMembers(SearchCond searchCond) {
@@ -67,7 +68,7 @@ public class MemberController {
 		return ResponseEntity.ok(members);
 	}
 
-	// 회원 삭제
+	@Tag(name = "회원 삭제", description = "관리자 권한 필요")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteMember(@PathVariable Long id) {

@@ -1,5 +1,7 @@
 package com.hanaro.cart.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.hanaro.cart.dto.CartRequestDTO;
@@ -113,6 +115,13 @@ public class CartServiceImpl implements CartService {
 		cartItemRepository.delete(cartItem);
 
 		return "해당 상품을 장바구니에서 삭제하였습니다.";
+	}
+
+	@Override
+	public void clearCart(Member member) {
+		Cart cart = cartRepository.findByMember(member);
+		List<CartItem> cartItems = cartItemRepository.findAllByCart_Customer(member);
+		cartItemRepository.deleteAll(cartItems);
 	}
 
 }

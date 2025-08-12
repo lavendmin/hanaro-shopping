@@ -18,8 +18,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.hanaro.orders.Orders;
-import com.hanaro.orders.OrdersRepository;
+import com.hanaro.orders.entity.Orders;
+import com.hanaro.orders.repository.OrdersRepository;
 
 @Configuration
 public class BatchConfig {
@@ -41,7 +41,8 @@ public class BatchConfig {
 			.build();
 	}
 
-	@Bean @StepScope
+	@Bean
+	@StepScope
 	// memoReader(@Value("#{jobParameters['filePath']}") String filePath) {
 	protected FlatFileItemReader<Orders> orderReader() {
 		return new FlatFileItemReaderBuilder<Orders>()
@@ -62,6 +63,5 @@ public class BatchConfig {
 			.methodName("save")
 			.build();
 	}
-
 
 }
