@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hanaro.SearchCond;
@@ -26,6 +27,7 @@ import com.hanaro.item.entity.ItemImage;
 import com.hanaro.item.repository.ItemImageRepository;
 import com.hanaro.item.repository.ItemRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -38,6 +40,7 @@ public class ItemServiceImpl implements ItemService {
 	private String uploadPath = "src/main/resources";
 
 	@Override
+	@Transactional
 	public ItemResponseDTO createItem(List<MultipartFile> files, ItemRequestDTO itemRequestDTO) {
 		Item item = itemRequestDTO.toEntity();
 		itemRepository.save(item);
@@ -82,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public Page<ItemResponseDTO> getItems(SearchCond searchCond) {
+	public Page<ItemDTO> getItems(SearchCond searchCond) {
 		Pageable pageable = searchCond.getPageable();
 
 		Page<Item> items;
@@ -94,10 +97,11 @@ public class ItemServiceImpl implements ItemService {
 			items = itemRepository.findAll(pageable);
 		}
 
-		return items.map(ItemServiceImpl::toItemResponseDTO);
+		return items.map(this::toItemDTO);
 	}
 
 	@Override
+	@Transactional
 	public ItemResponseDTO updateItem(long id, ItemDTO itemDTO) {
 		Item item = itemRepository.findById(id).orElseThrow();
 
@@ -113,12 +117,11 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
+	@Transactional
 	public String deleteItem(long id) {
-		Item item = itemRepository.findById(id).orElse(null);
-
-		if (item == null) {
-			return "해당 상품을 찾을 수 없습니다.";
-		}
+		Item item = itemRepository.findById(id).orElseThrow(
+			() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다.")
+		);
 
 		itemRepository.delete(item);
 
@@ -134,6 +137,14 @@ public class ItemServiceImpl implements ItemService {
 			.price(item.getPrice())
 			.discount(item.getDiscount())
 			.build();
+	}
+
+	@Override
+	public ItemResponseDTO getItemById(Long id) {
+		Item item = itemRepository.findById(id).orElseThrow(
+			() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다.")
+		);
+		return toItemResponseDTO(item);
 	}
 
 	public static ItemResponseDTO toItemResponseDTO(Item item) {

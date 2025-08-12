@@ -10,4 +10,9 @@ import com.hanaro.member.entity.Member;
 public interface CartRepository extends JpaRepository<Cart, Long> {
 	@Query("SELECT c FROM Cart c WHERE c.customer = :member")
 	Cart findByMember(@Param("member") Member member);
+
+	Cart findByCustomer(Member member);
+
+	boolean existsByCustomer(Member member);
+
 }

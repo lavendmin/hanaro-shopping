@@ -76,8 +76,8 @@ class MemberRepositoryTest {
 	void addTest() {
 		long preCount = memberRepository.count();
 
-		// 일반 유저 5명 추가
-		List<Member> members = Stream.iterate(1, n -> n + 1).limit(5)
+		// 일반 유저 10명 추가
+		List<Member> members = Stream.iterate(1, n -> n + 1).limit(20)
 			.map(n -> Member.builder()
 				.nickname("user" + n)
 				.email("user" + n + "@gmail.com")
@@ -87,6 +87,6 @@ class MemberRepositoryTest {
 
 		memberRepository.saveAll(members);
 
-		assertEquals(preCount + 5, memberRepository.findAll().size());
+		assertEquals(preCount + 20, memberRepository.findAll().size());
 	}
 }

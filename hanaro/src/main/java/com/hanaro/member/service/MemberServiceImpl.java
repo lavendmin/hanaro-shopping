@@ -15,6 +15,7 @@ import com.hanaro.member.dto.MemberResponseDTO;
 import com.hanaro.member.entity.Member;
 import com.hanaro.member.repository.MemberRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -56,11 +57,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public String deleteMember(long id) {
-		Member member = memberRepository.findById(id).orElse(null);
-
-		if (member == null) {
-			return "해당 회원을 찾을 수 없습니다.";
-		}
+		Member member = memberRepository.findById(id).orElseThrow(
+			() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
 
 		memberRepository.delete(member);
 		return "해당 회원을 삭제하였습니다.";
@@ -71,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		Member member = memberRepository.findByEmail(email).orElseThrow(
-			() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+			() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
 		return member.getId();
 	}
@@ -81,7 +79,7 @@ public class MemberServiceImpl implements MemberService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		return memberRepository.findByEmail(email).orElseThrow(
-			() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+			() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 	}
 
 	public static MemberResponseDTO toDTO(Member member) {

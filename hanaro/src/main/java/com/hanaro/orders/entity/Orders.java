@@ -1,9 +1,11 @@
 package com.hanaro.orders.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.hanaro.BaseEntity;
 import com.hanaro.member.entity.Member;
@@ -28,6 +30,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@DynamicInsert
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,6 +43,9 @@ public class Orders extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
+
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime statedAt;
 
 	@Column(nullable = false)
 	@ColumnDefault("0")

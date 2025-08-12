@@ -1,5 +1,7 @@
 package com.hanaro.cart.service;
 
+import java.util.List;
+
 import com.hanaro.cart.dto.CartRequestDTO;
 import com.hanaro.cart.dto.CartResponseDTO;
 import com.hanaro.member.entity.Member;
@@ -14,4 +16,6 @@ public interface CartService {
 	String deleteItemFromCart(Member member, Long itemId);
 
 	void clearCart(Member member);
+
+	List<CartResponseDTO> getCartItems(Member member);
 }

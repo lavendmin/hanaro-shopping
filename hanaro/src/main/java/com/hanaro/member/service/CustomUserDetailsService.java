@@ -10,9 +10,11 @@ import com.hanaro.member.entity.Member;
 import com.hanaro.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class CustomUserDetailsService implements UserDetailsService {
 	private final MemberRepository memberRepository;
 
@@ -34,7 +36,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 			member.getEmail(),
 			member.getPassword(),
 			member.getRole().name());
-		System.out.println("memberDTO = " + memberDTO);
+
+		log.info("memberDTO: {}", memberDTO);
+
 		return memberDTO;
 	}
 }

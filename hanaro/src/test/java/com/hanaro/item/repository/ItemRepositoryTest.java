@@ -21,17 +21,18 @@ class ItemRepositoryTest extends RepositoryTest {
 	void addTest() {
 		long preCount = itemRepository.count();
 
-		List<Item> items = Stream.iterate(1, n -> n + 1).limit(20)
+		List<Item> items = Stream.iterate(1, n -> n + 1).limit(30)
 			.map(n -> Item.builder()
 				.name("item" + n)
 				.description("description" + n)
 				.stock(30)
 				.price(10000)
+				.discount(n % 5 == 0 ? 10.0 : 0)
 				.build()
 			).toList();
 
 		itemRepository.saveAll(items);
 
-		assertEquals(preCount + 20, itemRepository.count());
+		assertEquals(preCount + 30, itemRepository.count());
 	}
 }

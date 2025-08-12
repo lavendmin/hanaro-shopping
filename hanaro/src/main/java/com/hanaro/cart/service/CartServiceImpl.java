@@ -3,6 +3,7 @@ package com.hanaro.cart.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hanaro.cart.dto.CartRequestDTO;
 import com.hanaro.cart.dto.CartResponseDTO;
@@ -15,6 +16,7 @@ import com.hanaro.item.repository.ItemRepository;
 import com.hanaro.item.service.ItemService;
 import com.hanaro.member.entity.Member;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,20 +24,17 @@ import lombok.RequiredArgsConstructor;
 public class CartServiceImpl implements CartService {
 	private final CartRepository cartRepository;
 	private final CartItemRepository cartItemRepository;
-	// private final MemberRepository memberRepository;
 	private final ItemRepository itemRepository;
 
 	private final ItemService itemService;
 
 	@Override
+	@Transactional
 	public CartResponseDTO addItemToCart(Member member, CartRequestDTO cartRequestDTO) {
-		// Member member = memberRepository.findById(memberId)
-		// 	.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
-		Cart cart = cartRepository.findByMember(member);
+		Cart cart = cartRepository.findByCustomer(member);
 
 		Item item = itemRepository.findById(cartRequestDTO.itemId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
+			.orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
 
 		if (item.getStock() == 0) {
 			throw new IllegalArgumentException("해당 상품은 품절 되었습니다.");
@@ -61,11 +60,6 @@ public class CartServiceImpl implements CartService {
 			cartItem.setQuantity(quantity);
 		}
 
-		// if (item.getStock() < cartItem.getQuantity()) {
-		// 	int possibleQuantity = item.getStock() - cartRequestDTO.quantity();
-		// 	throw new IllegalArgumentException("주문 가능 수량을 초과하였습니다. 주문 가능 수량: " + possibleQuantity);
-		// }
-
 		cartItemRepository.save(cartItem);
 
 		CartResponseDTO cartResponseDTO = new CartResponseDTO();
@@ -77,8 +71,9 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
+	@Transactional
 	public CartResponseDTO updateCart(Member member, CartRequestDTO cartRequestDTO) {
-		Cart cart = cartRepository.findByMember(member);
+		Cart cart = cartRepository.findByCustomer(member);
 		if (cart == null)
 			throw new IllegalArgumentException("장바구니가 없습니다.");
 
@@ -106,9 +101,10 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
+	@Transactional
 	public String deleteItemFromCart(Member member, Long itemId) {
 		Item item = itemRepository.findById(itemId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
+			.orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
 
 		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item);
 
@@ -118,10 +114,26 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
+	@Transactional
 	public void clearCart(Member member) {
-		Cart cart = cartRepository.findByMember(member);
+		Cart cart = cartRepository.findByCustomer(member);
 		List<CartItem> cartItems = cartItemRepository.findAllByCart_Customer(member);
 		cartItemRepository.deleteAll(cartItems);
+	}
+
+	@Override
+	public List<CartResponseDTO> getCartItems(Member member) {
+		Cart cart = cartRepository.findByCustomer(member);
+		List<CartItem> cartItems = cartItemRepository.findAllByCart_Customer(member);
+		return cartItems.stream().map(this::toDTO).toList();
+	}
+
+	private CartResponseDTO toDTO(CartItem cartItem) {
+		return CartResponseDTO.builder()
+			.cartId(cartItem.getCart().getId())
+			.quantity(cartItem.getQuantity())
+			.item(itemService.toItemDTO(cartItem.getItem()))
+			.build();
 	}
 
 }

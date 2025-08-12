@@ -6,6 +6,7 @@ import com.hanaro.item.entity.Item;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,13 +32,13 @@ public class OrderItem {
 	@ColumnDefault("0")
 	private int price; // 할인율 반영 가격
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orders", nullable = false, foreignKey = @ForeignKey(
 		name = "fk_OrderItem_orders",
 		foreignKeyDefinition = "FOREIGN KEY (orders) REFERENCES Orders(id) ON DELETE CASCADE"))
 	private Orders orders;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "item", nullable = false, foreignKey = @ForeignKey(
 		name = "fk_OrderItem_item",
 		foreignKeyDefinition = "FOREIGN KEY (item) REFERENCES Item(id) ON DELETE CASCADE"))

@@ -14,11 +14,13 @@ import com.hanaro.item.entity.Item;
 public interface ItemService {
 	ItemResponseDTO createItem(List<MultipartFile> files, ItemRequestDTO itemRequestDTO);
 
-	Page<ItemResponseDTO> getItems(SearchCond searchCond);
+	Page<ItemDTO> getItems(SearchCond searchCond);
 
 	ItemResponseDTO updateItem(long id, ItemDTO itemDTO);
 
 	String deleteItem(long id);
 
 	ItemDTO toItemDTO(Item item);
+
+	ItemResponseDTO getItemById(Long id);
 }

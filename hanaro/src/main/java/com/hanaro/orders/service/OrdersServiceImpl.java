@@ -1,11 +1,20 @@
 package com.hanaro.orders.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hanaro.PageCond;
 import com.hanaro.SearchOrdersCond;
@@ -34,13 +43,23 @@ public class OrdersServiceImpl implements OrdersService {
 	private final CartService cartService;
 	private final ItemRepository itemRepository;
 
+	private final JobLauncher jobLauncher;
+	private final Job csvJob;
+	private final Job statJob;
+
 	@Override
+	@Transactional
 	public OrderDTO createOrder(Member member) {
 		List<CartItem> cartItems = cartItemRepository.findAllByCart_Customer(member);
+
+		if (cartItems.isEmpty()) {
+			throw new IllegalArgumentException("장바구니가 비었습니다.");
+		}
 
 		Orders orders = new Orders();
 		orders.setCustomer(member);
 		orders.setOrderStatus(OrderStatus.PAID);
+		orders.setStatedAt(LocalDateTime.now());
 
 		ordersRepository.save(orders);
 
@@ -73,7 +92,6 @@ public class OrdersServiceImpl implements OrdersService {
 
 		orders.setTotalAmount(total);
 
-		// TODO: 장바구니 안의 내용 다 지우기 함수 <- orderItem으로 다 옮긴 게 성공한 뒤에 하고 싶음. 트랜잭션...?
 		cartService.clearCart(member); // 장바구니 비우기
 
 		orderDTO.setOrderStatus(orders.getOrderStatus());
@@ -99,6 +117,15 @@ public class OrdersServiceImpl implements OrdersService {
 		return orders.map(OrdersServiceImpl::toOrderDTO);
 	}
 
+	@Override
+	public BatchStatus runStatBatch() throws Exception {
+		JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+			.addString("saledt", LocalDate.now().toString())
+			.toJobParameters();
+
+		return jobLauncher.run(statJob, jobParameters).getStatus();
+	}
+
 	private static OrderItemDTO toOrderItemDTO(OrderItem orderItem) {
 		return OrderItemDTO.builder()
 			.orderId(orderItem.getOrders().getId())
@@ -120,5 +147,19 @@ public class OrdersServiceImpl implements OrdersService {
 			.totalAmount(orders.getTotalAmount())
 			.orderItems(orderItemDTOs)
 			.build();
+	}
+
+	@Scheduled(cron = "0/10 * * * * *")
+	public void updateStatusBatch() throws Exception {
+		OrderStatus status = OrderStatus.PAID;
+		while (status != OrderStatus.DELIVERED) {
+			LocalDateTime now = LocalDateTime.now();
+
+			int affectedRowCount = ordersRepository.updateStatusBatch(
+				status.getNextStatus(), status, now.minusMinutes(status.statusInterval()));
+			System.out.println("affectedRowCount = " + affectedRowCount);
+
+			status = status.getNextStatus();
+		}
 	}
 }

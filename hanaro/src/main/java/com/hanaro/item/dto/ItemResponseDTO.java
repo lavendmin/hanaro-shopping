@@ -9,12 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class ItemResponseDTO {
+public class ItemResponseDTO extends ItemDTO {
 	private Long id;
-	private String name;
-	private String description;
-	private int stock;
-	private int price;
-	private double discount;
 	private List<ItemImageDTO> images;
 }
