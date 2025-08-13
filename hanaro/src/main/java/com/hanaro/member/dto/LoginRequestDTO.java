@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record LoginRequestDTO(
 	@NotBlank(message = "이메일을 입력해주세요.")
 	@Size(min = 1, max = 50)
-	@Schema(name = "email", example = "lee@gmail.com")
+	@Schema(name = "email", example = "hanaro@gmail.com")
 	String email,
 
 	@NotBlank(message = "비밀번호를 입력해주세요.")

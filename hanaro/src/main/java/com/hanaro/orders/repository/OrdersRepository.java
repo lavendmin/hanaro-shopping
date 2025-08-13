@@ -24,12 +24,12 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersQDs
 		@Param("status") OrderStatus status,
 		@Param("timeToUp") LocalDateTime timeToUp);
 
-	@Query(value = "select 'today' saledt, count(*) ordercnt, 0 totalAmt from Orders o"
+	@Query(value = "select 'today' as saledt, count(*) as ordercnt, 0 as totamt from Orders o"
 		+ " where o.createdAt between concat(:saledt, ' 00:00:00.00') and concat(:saledt, ' 23:59:59.99')", nativeQuery = true)
-	public SaleStat getTodayStat(@Param("saledt") String saledt);
+	public SaleStat getTodayStat(@Param("saledt") String saledt); // 
 
 	@Query(value =
-		"select oi.item as id, max(oi.id) as orders, oi.item, sum(oi.cnt) as cnt, sum(oi.amt) as amt"
+		"select oi.item as id, max(oi.id) as orders, oi.item, sum(oi.quantity) as quantity, sum(oi.price) as price"
 			+ "  from Orders o inner join OrderItem oi on o.id = oi.orders"
 			+ " where o.createdAt between concat(:saledt, ' 00:00:00.00') and concat(:saledt, ' 23:59:59.99')"
 			+ " group by oi.item", nativeQuery = true)

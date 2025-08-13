@@ -1,160 +1,27 @@
 SET FOREIGN_KEY_CHECKS = 0;
-truncate table CartItem;
-truncate table Cart;
-truncate table OrderItem;
-truncate table Orders;
-truncate table ItemImage;
-truncate table Item;
 truncate table Member;
+truncate table Item;
+truncate table ItemImage;
+truncate table Cart;
+truncate table CartItem;
+truncate table Orders;
+truncate table OrderItem;
+truncate table SaleStat;
+truncate table SaleItemStat;
 SET FOREIGN_KEY_CHECKS = 1;
+
+ALTER TABLE SaleItemStat
+    ADD UNIQUE KEY uk_saledt_item (saledt, item);
 
 SET time_zone = "Asia/Seoul";
 
-INSERT INTO `Member`(createdAt, id, updatedAt, nickname, email, password, role)
-VALUES ('2025-08-12 06:20:30', 1, '2025-08-12 06:20:30', 'hanaro', 'hanaro@gmail.com',
-        '$2a$10$GT6ws4N9YURJIq/5eCA/M.SDjEh3DoXg4OVcE013wIuVR60E1dZOu', 'ROLE_ADMIN'),
-       ('2025-08-12 06:20:31', 2, '2025-08-12 06:20:31', 'Lee', 'lee@gmail.com',
-        '$2a$10$ACAOxpAXf597aMApJV9fF.oZb2hKikgHSPUaHfNul1l/qzKGBrLt.', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 3, '2025-08-12 06:20:32', 'user1', 'user1@gmail.com',
-        '$2a$10$KPEJWfX0FO0./lL6YpvUcOttenrp5h0JDwTYoQhnNaRZ80CPgbFzC', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 4, '2025-08-12 06:20:32', 'user2', 'user2@gmail.com',
-        '$2a$10$VSm.CtaD.x4znDHh2I9yk.QI0F5/1JkkL4uKQM5cHYNQOqdpCYQUq', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 5, '2025-08-12 06:20:32', 'user3', 'user3@gmail.com',
-        '$2a$10$jAEJhMgLhaE5ptrQwvNny.4VXSfaLqRtNa2vDmlsO2OBuJ9dAEg.6', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 6, '2025-08-12 06:20:32', 'user4', 'user4@gmail.com',
-        '$2a$10$CSrdL44nB7sC3eWu4fly..cDmmuCsSqbmrcwgephaDKtgN6uUIbja', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 7, '2025-08-12 06:20:32', 'user5', 'user5@gmail.com',
-        '$2a$10$TWSio7nhQbO5u3UcVpSZLutxe5DDxyo/4PuWFeRw2vkUJ0iNKp9AS', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 8, '2025-08-12 06:20:32', 'user6', 'user6@gmail.com',
-        '$2a$10$07XOo3ZFrm2NEQDeanQAle70tdwlIz.2lEp.AK6jj64MqiSgGLnWK', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 9, '2025-08-12 06:20:32', 'user7', 'user7@gmail.com',
-        '$2a$10$gOZX/9EQASXm0iE2F5SqiOWMeN4FfColqAtHKzRRKYYn8Hma5Phq.', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 10, '2025-08-12 06:20:32', 'user8', 'user8@gmail.com',
-        '$2a$10$IvZy10uWNppZCG6gzF4IoeB/i98JL1qTI/kBpjxTnZHrKzlx1okWW', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 11, '2025-08-12 06:20:32', 'user9', 'user9@gmail.com',
-        '$2a$10$ZrtMpOOsxmX7oaudjmkZl.Ij34ZFQB5Z3BilyUWYAhCtD2qiezrH.', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 12, '2025-08-12 06:20:32', 'user10', 'user10@gmail.com',
-        '$2a$10$OZ0gvcwDQC8EJuD8auJv1ekXkyzd9SJD98dMkpOHN.k54nCDerQXG', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 13, '2025-08-12 06:20:32', 'user11', 'user11@gmail.com',
-        '$2a$10$aVqGZroclzBJwefSAzp9quIhzREHiyHMPKyUWykiWGxKDweQOETVS', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 14, '2025-08-12 06:20:32', 'user12', 'user12@gmail.com',
-        '$2a$10$65djnzGXK3gM2dajC8TJme9tqN3XB.ngsVnRBLknEP3n5wDvIYAUa', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 15, '2025-08-12 06:20:32', 'user13', 'user13@gmail.com',
-        '$2a$10$b68oXtGD5vW0hftq/BguqeIRmhWhx.3VIKxZ12ZzTZLr9TGKN0kwy', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 16, '2025-08-12 06:20:32', 'user14', 'user14@gmail.com',
-        '$2a$10$U9mQlkWe7g0XgIXbRi5j0en9ivH0LnDUeGBxtNXOJtsYP1./qkq8K', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 17, '2025-08-12 06:20:32', 'user15', 'user15@gmail.com',
-        '$2a$10$XZDs/lysJ/kyyrm.Qf4T4e2/Y2zRwzLEt4.LYzr8QCf5hfIFr5CaC', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 18, '2025-08-12 06:20:32', 'user16', 'user16@gmail.com',
-        '$2a$10$UxD..izCMfSJArm0Emol8OeZWVDWv18ha9JaV3ZypnzU6haFCkkyG', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 19, '2025-08-12 06:20:32', 'user17', 'user17@gmail.com',
-        '$2a$10$vsrN8pHyWwzmJ0M/RFzT8uBnbVgrsU/5CFMcRw7hwJ0bkC6VurDOO', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 20, '2025-08-12 06:20:32', 'user18', 'user18@gmail.com',
-        '$2a$10$aR7URIu9NpNKtBFYxnxpL.6SLScPwF/T712FEHsxzAkGe.wE3.xii', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 21, '2025-08-12 06:20:32', 'user19', 'user19@gmail.com',
-        '$2a$10$IQyL1tiVOr9goOarP4nFGucHohLkiFe3DPHDaehKuBp9CHWtrWK6K', 'ROLE_USER'),
-       ('2025-08-12 06:20:32', 22, '2025-08-12 06:20:32', 'user20', 'user20@gmail.com',
-        '$2a$10$Wk32pIRNxHSNhq7pBBtuhevb6r256r5kP4ik8X0JdtTmB8F/nko4W', 'ROLE_USER');
 
-INSERT INTO `Item`(discount, price, stock, id, name, description)
-VALUES (0, 10000, 30, 1, 'item1', 'description1'),
-       (0, 10000, 30, 2, 'item2', 'description2'),
-       (0, 10000, 30, 3, 'item3', 'description3'),
-       (0, 10000, 30, 4, 'item4', 'description4'),
-       (10, 10000, 30, 5, 'item5', 'description5'),
-       (0, 10000, 30, 6, 'item6', 'description6'),
-       (0, 10000, 30, 7, 'item7', 'description7'),
-       (0, 10000, 30, 8, 'item8', 'description8'),
-       (0, 10000, 30, 9, 'item9', 'description9'),
-       (10, 10000, 30, 10, 'item10', 'description10'),
-       (0, 10000, 30, 11, 'item11', 'description11'),
-       (0, 10000, 30, 12, 'item12', 'description12'),
-       (0, 10000, 30, 13, 'item13', 'description13'),
-       (0, 10000, 30, 14, 'item14', 'description14'),
-       (10, 10000, 30, 15, 'item15', 'description15'),
-       (0, 10000, 30, 16, 'item16', 'description16'),
-       (0, 10000, 30, 17, 'item17', 'description17'),
-       (0, 10000, 30, 18, 'item18', 'description18'),
-       (0, 10000, 30, 19, 'item19', 'description19'),
-       (10, 10000, 30, 20, 'item20', 'description20'),
-       (0, 10000, 30, 21, 'item21', 'description21'),
-       (0, 10000, 30, 22, 'item22', 'description22'),
-       (0, 10000, 30, 23, 'item23', 'description23'),
-       (0, 10000, 30, 24, 'item24', 'description24'),
-       (10, 10000, 30, 25, 'item25', 'description25'),
-       (0, 10000, 30, 26, 'item26', 'description26'),
-       (0, 10000, 30, 27, 'item27', 'description27'),
-       (0, 10000, 30, 28, 'item28', 'description28'),
-       (0, 10000, 30, 29, 'item29', 'description29'),
-       (10, 10000, 30, 30, 'item30', 'description30');
+INSERT INTO `Member` VALUES ('2025-08-13 04:17:42',1,'2025-08-13 04:17:42','hanaro','hanaro@gmail.com','$2a$10$ksmrzfFsfMysWAZrsSU1cuioFlYYkSLSc7sNw9Z5xVfbx5Eb9vME6','ROLE_ADMIN'),('2025-08-13 04:17:42',2,'2025-08-13 04:17:42','Lee','lee@gmail.com','$2a$10$1qEKP9khCv6VngKAntXaLeYhyzZpcgNsIRMQkk745MSXUbiJLWNIC','ROLE_USER'),('2025-08-13 04:17:44',3,'2025-08-13 04:17:44','user1','user1@gmail.com','$2a$10$Drx8tXqeKQEH5LWQf7MfPOwP2zCM4.AwE0kbj8ciiPdb8uRUvNKey','ROLE_USER'),('2025-08-13 04:17:44',4,'2025-08-13 04:17:44','user2','user2@gmail.com','$2a$10$RIdMOXcWyFSrOwH0msgMTujsGsQj5yWr92BJCi5333I76fGLWKOqO','ROLE_USER'),('2025-08-13 04:17:44',5,'2025-08-13 04:17:44','user3','user3@gmail.com','$2a$10$Xu70qmjLyCaJEAWB39Q2A.06JiM63Xr/IGCltSuEypEForOVrEZXi','ROLE_USER'),('2025-08-13 04:17:44',6,'2025-08-13 04:17:44','user4','user4@gmail.com','$2a$10$7RbUV8dQlh7maXIKsxMq7.BBSxg7AcPZoHZXIqV34m4KPsl2m3XN6','ROLE_USER'),('2025-08-13 04:17:44',7,'2025-08-13 04:17:44','user5','user5@gmail.com','$2a$10$aU1YjaEYnkTR8aSGvcta5OD4SMHSZ1uHne9DcsmCm/rrLVKGSbWt6','ROLE_USER'),('2025-08-13 04:17:44',8,'2025-08-13 04:17:44','user6','user6@gmail.com','$2a$10$BMnOCiBPCQ7o4Cgyl9Skv.6V3uvJ6vd.WEaozQ4H6nHNOaBAi1cZ.','ROLE_USER'),('2025-08-13 04:17:44',9,'2025-08-13 04:17:44','user7','user7@gmail.com','$2a$10$aPHVZpRcO5bo08ltMxHvJOO7psr6P.EwWnrmEwXjUtZm5ky8kQEaS','ROLE_USER'),('2025-08-13 04:17:44',10,'2025-08-13 04:17:44','user8','user8@gmail.com','$2a$10$D4ByE9/XNMjy/U6WTPzYw.MDVTnz4Ae667x57ktMMDr0JfGBdwE8m','ROLE_USER'),('2025-08-13 04:17:44',11,'2025-08-13 04:17:44','user9','user9@gmail.com','$2a$10$2XjaIYr52fzCaZizN544i.3r6aX18X6xVCsDBOtXNrW2k5uRXsOaa','ROLE_USER'),('2025-08-13 04:17:44',12,'2025-08-13 04:17:44','user10','user10@gmail.com','$2a$10$3fEN/d7xJapTvaZ0CAZEYOr4NtshAWDdxQ8AOKeIyVNWJfZzv4Cnq','ROLE_USER'),('2025-08-13 04:17:44',13,'2025-08-13 04:17:44','user11','user11@gmail.com','$2a$10$1OeDeHVRIfSmXmp/DfdHkedw9rAXVmhuAO7YOVlk8BDHsmfVvMgzC','ROLE_USER'),('2025-08-13 04:17:44',14,'2025-08-13 04:17:44','user12','user12@gmail.com','$2a$10$GIOsbOHW6egM2smDOLG8puzdC.4p01EirdHhGYirYnm8fCFimNoyO','ROLE_USER'),('2025-08-13 04:17:44',15,'2025-08-13 04:17:44','user13','user13@gmail.com','$2a$10$8LWT0zqFVf5tyALX0WAWlOyBvEypshUQm5/7d5.5nM.KVte2EXA2u','ROLE_USER'),('2025-08-13 04:17:44',16,'2025-08-13 04:17:44','user14','user14@gmail.com','$2a$10$xzCVe1MvTOi9ciWfUXtrjOjNCKyr3CvKODQp6rLLCVbV1m70FbTKq','ROLE_USER'),('2025-08-13 04:17:44',17,'2025-08-13 04:17:44','user15','user15@gmail.com','$2a$10$Zsp7RImHy10bZ3bU.ceKturnxjEjFXZD4IERwnp7vQdPPw22kTGry','ROLE_USER'),('2025-08-13 04:17:44',18,'2025-08-13 04:17:44','user16','user16@gmail.com','$2a$10$i/CgsqARmi2H5p0Tc9bRjefs4aBnySe1jqO2mqz7ccsBPMrtGocYK','ROLE_USER'),('2025-08-13 04:17:44',19,'2025-08-13 04:17:44','user17','user17@gmail.com','$2a$10$yqfb9xi3eEysNI.sCC51QOsSIaZD5xAwbWcgACFsC2NyvBxueiMsC','ROLE_USER'),('2025-08-13 04:17:44',20,'2025-08-13 04:17:44','user18','user18@gmail.com','$2a$10$BKtAJj0i2PtP.b9J2WxCq.PlfO2NHBD0GO2uIGjRqMWdUDn4VMn9O','ROLE_USER'),('2025-08-13 04:17:44',21,'2025-08-13 04:17:44','user19','user19@gmail.com','$2a$10$CjS4DFkudaw2NeXj3cYrjeM79yRFXP/S.G35YamgVzdVsAfbIFjwC','ROLE_USER'),('2025-08-13 04:17:44',22,'2025-08-13 04:17:44','user20','user20@gmail.com','$2a$10$a.b1QmEHwUBu7wLon55IE.9ItD/ENNe60Pv1r.sF.UJbRHZRSy5J2','ROLE_USER');
 
-INSERT INTO `Cart`(createdAt, customer, id, updatedAt)
-VALUES ('2025-08-12 06:20:59', 1, 1, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 2, 2, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 3, 3, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 4, 4, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 5, 5, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 6, 6, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 7, 7, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 8, 8, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 9, 9, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 10, 10, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 11, 11, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 12, 12, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 13, 13, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 14, 14, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 15, 15, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 16, 16, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 17, 17, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 18, 18, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 19, 19, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 20, 20, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 21, 21, '2025-08-12 06:20:59'),
-       ('2025-08-12 06:20:59', 22, 22, '2025-08-12 06:20:59');
+INSERT INTO `Item` VALUES (10,10000,20,1,'apple','당도 최고 사과'),(10,10000,20,2,'banana','당도 최고 바나나'),(10,10000,20,3,'pear','당도 최고 배'),(10,10000,20,4,'tangerine','당도 최고 귤'),(10,10000,20,5,'단감','당도 최고 단감'),(10,10000,20,6,'strawberry','당도 최고 딸기'),(10,10000,20,7,'복숭아','당도 최고 복숭아'),(10,10000,20,8,'자두','당도 최고 자두'),(10,10000,20,9,'블루베리','당도 최고 블루베리'),(10,10000,20,10,'파인애플','당도 최고 파인애플'),(0,10000,26,11,'item1','description1'),(0,10000,26,12,'item2','description2'),(0,10000,26,13,'item3','description3'),(0,10000,26,14,'item4','description4'),(10,10000,26,15,'item5','description5'),(0,10000,30,16,'item6','description6'),(0,10000,30,17,'item7','description7'),(0,10000,30,18,'item8','description8'),(0,10000,30,19,'item9','description9'),(10,10000,30,20,'item10','description10'),(0,10000,30,21,'item11','description11'),(0,10000,30,22,'item12','description12'),(0,10000,30,23,'item13','description13'),(0,10000,30,24,'item14','description14'),(10,10000,30,25,'item15','description15'),(0,10000,30,26,'item16','description16'),(0,10000,30,27,'item17','description17'),(0,10000,30,28,'item18','description18'),(0,10000,30,29,'item19','description19'),(10,10000,30,30,'item20','description20'),(0,10000,30,31,'item21','description21'),(0,10000,30,32,'item22','description22'),(0,10000,30,33,'item23','description23'),(0,10000,30,34,'item24','description24'),(10,10000,30,35,'item25','description25'),(0,10000,30,36,'item26','description26'),(0,10000,30,37,'item27','description27'),(0,10000,30,38,'item28','description28'),(0,10000,30,39,'item29','description29'),(10,10000,30,40,'item30','description30');
 
-INSERT INTO `CartItem`(quantity, cart, id, item)
-VALUES (2, 2, 1, 1),
-       (2, 2, 2, 2),
-       (2, 2, 3, 3),
-       (2, 2, 4, 4),
-       (2, 2, 5, 5),
-       (2, 3, 6, 1),
-       (2, 3, 7, 2),
-       (2, 3, 8, 3),
-       (2, 3, 9, 4),
-       (2, 3, 10, 5),
-       (2, 4, 11, 1),
-       (2, 4, 12, 2),
-       (2, 4, 13, 3),
-       (2, 4, 14, 4),
-       (2, 4, 15, 5),
-       (2, 5, 16, 1),
-       (2, 5, 17, 2),
-       (2, 5, 18, 3),
-       (2, 5, 19, 4),
-       (2, 5, 20, 5),
-       (2, 6, 21, 1),
-       (2, 6, 22, 2),
-       (2, 6, 23, 3),
-       (2, 6, 24, 4),
-       (2, 6, 25, 5),
-       (2, 7, 26, 1),
-       (2, 7, 27, 2),
-       (2, 7, 28, 3),
-       (2, 7, 29, 4),
-       (2, 7, 30, 5),
-       (2, 8, 31, 1),
-       (2, 8, 32, 2),
-       (2, 8, 33, 3),
-       (2, 8, 34, 4),
-       (2, 8, 35, 5),
-       (2, 9, 36, 1),
-       (2, 9, 37, 2),
-       (2, 9, 38, 3),
-       (2, 9, 39, 4),
-       (2, 9, 40, 5),
-       (2, 10, 41, 1),
-       (2, 10, 42, 2),
-       (2, 10, 43, 3),
-       (2, 10, 44, 4),
-       (2, 10, 45, 5);
+INSERT INTO `ItemImage` VALUES ('2025-08-13 04:19:43',1,1,'2025-08-13 04:19:43','apple1.jpeg','2025/08/13','736d536a-1b1c-40dc-8dd4-d88f866b25ca_apple1.jpeg'),('2025-08-13 04:19:43',2,1,'2025-08-13 04:19:43','apple2.jpeg','2025/08/13','55203eb7-17ef-4281-980a-45584dbd1586_apple2.jpeg'),('2025-08-13 04:20:36',3,2,'2025-08-13 04:20:36','banana.jpeg','2025/08/13','1a9d6c95-57a4-4496-a94b-77e0f3a62759_banana.jpeg'),('2025-08-13 04:21:16',4,3,'2025-08-13 04:21:16','pear.jpeg','2025/08/13','4e303a47-fe8c-4955-854f-69fa141acc2b_pear.jpeg'),('2025-08-13 04:22:42',5,4,'2025-08-13 04:22:42','귤.jpeg','2025/08/13','33f84843-b64b-428c-92e8-4892921371c2_귤.jpeg'),('2025-08-13 04:23:14',6,5,'2025-08-13 04:23:14','단감.jpeg','2025/08/13','a2fffe46-1a79-4b9a-ae19-f287c14e782a_단감.jpeg'),('2025-08-13 04:23:51',7,6,'2025-08-13 04:23:51','딸기.jpeg','2025/08/13','0def5075-eea8-4eed-ae80-28d5bb6dc6f8_딸기.jpeg'),('2025-08-13 04:24:23',8,7,'2025-08-13 04:24:23','복숭아.jpeg','2025/08/13','8cb97d5b-0f6e-498d-86e5-5904b5f6d6fe_복숭아.jpeg'),('2025-08-13 04:24:50',9,8,'2025-08-13 04:24:50','자두.jpeg','2025/08/13','fe8a6771-022a-47ae-adbb-a63b78e40157_자두.jpeg'),('2025-08-13 04:25:13',10,9,'2025-08-13 04:25:13','블루베리.jpeg','2025/08/13','11897637-7ae1-4038-a1ed-4066f2904279_블루베리.jpeg'),('2025-08-13 04:25:39',11,10,'2025-08-13 04:25:39','파인애플.jpeg','2025/08/13','6e492793-833c-4f86-9812-2ea8b423ec35_파인애플.jpeg');
+
+INSERT INTO `Cart` VALUES ('2025-08-13 04:28:27',1,1,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',2,2,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',3,3,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',4,4,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',5,5,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',6,6,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',7,7,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',8,8,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',9,9,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',10,10,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',11,11,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',12,12,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',13,13,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',14,14,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',15,15,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',16,16,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',17,17,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',18,18,'2025-08-13 04:28:27'),('2025-08-13 04:28:27',19,19,'2025-08-13 04:28:27'),('2025-08-13 04:28:28',20,20,'2025-08-13 04:28:28'),('2025-08-13 04:28:28',21,21,'2025-08-13 04:28:28'),('2025-08-13 04:28:28',22,22,'2025-08-13 04:28:28');
+
+INSERT INTO `CartItem` VALUES (2,2,1,11),(2,2,2,12),(2,2,3,13),(2,2,4,14),(2,2,5,15),(2,5,16,11),(2,5,17,12),(2,5,18,13),(2,5,19,14),(2,5,20,15),(2,6,21,11),(2,6,22,12),(2,6,23,13),(2,6,24,14),(2,6,25,15),(2,7,26,11),(2,7,27,12),(2,7,28,13),(2,7,29,14),(2,7,30,15),(2,8,31,11),(2,8,32,12),(2,8,33,13),(2,8,34,14),(2,8,35,15),(2,9,36,11),(2,9,37,12),(2,9,38,13),(2,9,39,14),(2,9,40,15),(2,10,41,11),(2,10,42,12),(2,10,43,13),(2,10,44,14),(2,10,45,15);

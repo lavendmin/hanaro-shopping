@@ -1,5 +1,6 @@
 package com.hanaro.orders.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hanaro.item.entity.Item;
 
 import jakarta.persistence.Entity;
@@ -26,6 +27,7 @@ public class SaleItemStat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "saledt",
 		foreignKey = @ForeignKey(name = "fk_SaleItemStat_saledt_SaleStat",

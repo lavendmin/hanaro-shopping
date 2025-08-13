@@ -29,9 +29,11 @@ import com.hanaro.item.repository.ItemRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ItemServiceImpl implements ItemService {
 	private final ItemRepository itemRepository;
 	private final ItemImageRepository itemImageRepository;
@@ -102,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	@Transactional
-	public ItemResponseDTO updateItem(long id, ItemDTO itemDTO) {
+	public ItemResponseDTO updateItem(Long id, ItemDTO itemDTO) {
 		Item item = itemRepository.findById(id).orElseThrow();
 
 		item.setName(itemDTO.getName());
@@ -118,10 +120,14 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	@Transactional
-	public String deleteItem(long id) {
+	public String deleteItem(Long id) {
 		Item item = itemRepository.findById(id).orElseThrow(
 			() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다.")
 		);
+
+		// resources에 있는 이미지 파일 삭제
+		item.getImages().forEach(image ->
+			deleteImageFile(image.getSavedir(), image.getSavename()));
 
 		itemRepository.delete(item);
 
@@ -161,6 +167,20 @@ public class ItemServiceImpl implements ItemService {
 			.discount(item.getDiscount())
 			.images(imageDTOs)
 			.build();
+	}
+
+	private void deleteImageFile(String savedir, String savename) {
+		try {
+			Path filePath = Paths.get(uploadPath, savedir, savename);
+			if (Files.exists(filePath)) {
+				Files.delete(filePath);
+				log.info("Deleted image file: {}", filePath);
+			} else {
+				log.info("File not found, skip delete: {}", filePath);
+			}
+		} catch (Exception e) {
+			log.error("Failed to delete image file: {}/{}", savedir, savename);
+		}
 	}
 
 	private String getTodayPath() {

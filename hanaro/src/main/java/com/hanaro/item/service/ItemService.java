@@ -16,9 +16,9 @@ public interface ItemService {
 
 	Page<ItemDTO> getItems(SearchCond searchCond);
 
-	ItemResponseDTO updateItem(long id, ItemDTO itemDTO);
+	ItemResponseDTO updateItem(Long id, ItemDTO itemDTO);
 
-	String deleteItem(long id);
+	String deleteItem(Long id);
 
 	ItemDTO toItemDTO(Item item);
 

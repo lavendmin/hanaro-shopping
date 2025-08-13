@@ -48,7 +48,7 @@ public class CartServiceImpl implements CartService {
 		}
 
 		// cartItem 저장
-		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item);
+		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item).orElse(null);
 
 		if (cartItem == null) {
 			cartItem = new CartItem();
@@ -84,9 +84,8 @@ public class CartServiceImpl implements CartService {
 			throw new IllegalArgumentException("해당 상품은 품절 되었습니다.");
 		}
 
-		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item);
-		if (cartItem == null)
-			throw new IllegalArgumentException("장바구니에 해당 상품이 없습니다.");
+		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item).orElseThrow(
+			() -> new EntityNotFoundException("해당 상품을 장바구니에서 찾을 수 없습니다."));
 
 		// 업데이트
 		cartItem.setQuantity(Math.min(cartRequestDTO.quantity(), item.getStock()));
@@ -106,7 +105,8 @@ public class CartServiceImpl implements CartService {
 		Item item = itemRepository.findById(itemId)
 			.orElseThrow(() -> new EntityNotFoundException("해당 상품을 찾을 수 없습니다."));
 
-		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item);
+		CartItem cartItem = cartItemRepository.findByMemberAndItem(member, item).orElseThrow(
+			() -> new EntityNotFoundException("해당 상품을 장바구니에서 찾을 수 없습니다."));
 
 		cartItemRepository.delete(cartItem);
 

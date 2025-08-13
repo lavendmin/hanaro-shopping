@@ -57,7 +57,7 @@ class CartRepositoryTest extends RepositoryTest {
 			Cart cart = cartRepository.findByCustomer(member);
 
 			CartItem cartItem;
-			for (long itemId = 1; itemId <= 5; itemId++) {
+			for (long itemId = 11; itemId <= 15; itemId++) {
 				Item item = itemRepository.findById(itemId).orElseThrow();
 				cartItem = new CartItem();
 				cartItem.setItem(item);

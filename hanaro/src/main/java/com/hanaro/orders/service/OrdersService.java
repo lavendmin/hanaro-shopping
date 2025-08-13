@@ -1,6 +1,5 @@
 package com.hanaro.orders.service;
 
-import org.springframework.batch.core.BatchStatus;
 import org.springframework.data.domain.Page;
 
 import com.hanaro.PageCond;
@@ -15,5 +14,4 @@ public interface OrdersService {
 
 	Page<OrderDTO> getOrders(SearchOrdersCond searchOrdersCond);
 
-	BatchStatus runStatBatch() throws Exception;
 }

@@ -33,6 +33,8 @@ public class OrderBatchConfig {
 	private final OrdersRepository ordersRepository;
 	private final SaleStatRepository saleStatRepository;
 
+	// Job -> Step -> Reader(Orders) -> Processor -> Writer(SaleStat)
+
 	@Bean
 	public Job statJob(JobRepository jobRepository, Step statStep) {
 		return new JobBuilder("statJob", jobRepository)
@@ -67,7 +69,7 @@ public class OrderBatchConfig {
 		return stat -> {
 			SaleStat todayStat = SaleStat.builder()
 				.saledt(saledt)
-				.orderCnt(stat.getOrderCnt())
+				.ordercnt(stat.getOrdercnt())
 				.build();
 			System.out.println("bbb - todayStat = " + todayStat);
 
@@ -84,7 +86,7 @@ public class OrderBatchConfig {
 
 			todayStat.setSaleItemStats(todayItems);
 			int sum = todayItems.stream().mapToInt(SaleItemStat::getAmt).sum();
-			todayStat.setTotalAmt(sum);
+			todayStat.setTotamt(sum);
 
 			return todayStat;
 		};
@@ -93,7 +95,7 @@ public class OrderBatchConfig {
 	@Bean
 	@StepScope
 	public ItemReader<SaleStat> statReader(@Value("#{jobParameters['saledt']}") String saledt) {
-		SaleStat todayStat = ordersRepository.getTodayStat(saledt);
+		SaleStat todayStat = ordersRepository.getTodayStat(saledt); // 통계 낼 기반이 되는 데이터 읽어 옴
 		System.out.println("bbr - todayStat = " + todayStat);
 		return new ListItemReader<>(List.of(todayStat));
 	}
